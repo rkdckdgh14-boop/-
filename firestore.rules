@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isAdmin() { return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isVerifiedUser() { return isSignedIn() && request.auth.token.email_verified == true; }
+
+    // --- Validation Blueprints ---
+
+    function isValidUser(data) {
+      return data.uid == request.auth.uid
+        && data.email is string && data.email.size() <= 128
+        && (data.displayName == null || (data.displayName is string && data.displayName.size() <= 100))
+        && (data.photoURL == null || (data.photoURL is string && data.photoURL.size() <= 500))
+        && (data.createdAt == null || data.createdAt is timestamp);
+    }
+
+    function isValidBooking(data) {
+      return data.userId == request.auth.uid
+        && data.userName is string && data.userName.size() <= 100
+        && data.userPhone is string && data.userPhone.size() <= 20
+        && data.address is string && data.address.size() <= 300
+        && data.serviceType in ['일반 청소', '입주 청소', '이사 청소', '정기 청소']
+        && data.date is string && data.date.size() <= 20
+        && data.time is string && data.time.size() <= 20
+        && data.status in ['예약완료', '방문예정', '완료', '취소']
+        && (data.notes == null || (data.notes is string && data.notes.size() <= 1000))
+        && (data.price == null || data.price is number)
+        && (data.paymentStatus == null || data.paymentStatus in ['현장결제', '결제완료'])
+        && data.createdAt is timestamp;
+    }
+
+    function isValidReview(data) {
+      return data.userId == request.auth.uid
+        && data.userName is string && data.userName.size() <= 100
+        && data.content is string && data.content.size() <= 1000
+        && data.rating is number && data.rating >= 1 && data.rating <= 5
+        && data.createdAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidUser(incoming());
+      allow update: if (isOwner(userId) || isAdmin()) && isValidUser(incoming())
+        && (isAdmin() || (incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'phoneNumber'])));
+    }
+
+    match /bookings/{bookingId} {
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isVerifiedUser() && isValidBooking(incoming()) && isValidId(bookingId);
+      allow update: if (isSignedIn() && (existing().userId == request.auth.uid || isAdmin()))
+        && (
+          // Admin override
+          (isAdmin()) ||
+          // User cancellation action
+          (existing().userId == request.auth.uid 
+           && incoming().userId == existing().userId
+           && incoming().status == '취소'
+           && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+           && existing().status != '완료')
+        );
+      allow delete: if isAdmin();
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if true; // Reviews are public
+      allow create: if isVerifiedUser() && isValidReview(incoming()) && isValidId(reviewId);
+      allow update: if isAdmin();
+      allow delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+    }
+
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false; // Managed manually or via server
+    }
+  }
+}

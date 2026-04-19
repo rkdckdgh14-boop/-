@@ -38,6 +38,7 @@ export default function BookingForm() {
 
     setIsLoading(true);
     try {
+      // 1. Firebase Firestore storage
       await addDoc(collection(db, 'bookings'), {
         userId: auth.currentUser.uid,
         userName: name,
@@ -53,6 +54,32 @@ export default function BookingForm() {
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+
+      // 2. Formspree data collection
+      try {
+        await fetch('https://formspree.io/f/mrerkoew', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name,
+            phone,
+            address,
+            serviceType,
+            date: format(selectedDate, 'yyyy-MM-dd'),
+            time: selectedTime,
+            notes,
+            price: SERVICE_PRICES[serviceType],
+            customerEmail: auth.currentUser.email
+          })
+        });
+      } catch (formspreeError) {
+        console.error('Formspree submission failed:', formspreeError);
+        // We continue anyway since Firestore booking succeeded
+      }
+
       setIsSuccess(true);
       setTimeout(() => navigate('/mypage'), 2000);
     } catch (error) {

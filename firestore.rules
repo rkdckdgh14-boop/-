@@ -43,6 +43,7 @@ service cloud.firestore {
     function isValidReview(data) {
       return data.userId == request.auth.uid
         && data.userName is string && data.userName.size() <= 100
+        && (data.userPhoto == null || (data.userPhoto is string && data.userPhoto.size() <= 500))
         && data.content is string && data.content.size() <= 1000
         && data.rating is number && data.rating >= 1 && data.rating <= 5
         && data.createdAt is timestamp;

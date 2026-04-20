@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import PromotionBanner from './components/PromotionBanner';
 import BookingForm from './components/BookingForm';
 import ReviewSection from './components/ReviewSection';
+import CleaningCases from './components/CleaningCases';
 import AdminDashboard from './components/AdminDashboard';
 import MyPage from './components/MyPage';
 import { Sparkles, ArrowRight, ShieldCheck, Clock, Zap } from 'lucide-react';
@@ -208,6 +209,7 @@ export default function App() {
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/reviews" element={<ReviewSection />} />
+            <Route path="/cases" element={<CleaningCases />} />
           </Routes>
         </main>
         <Footer />

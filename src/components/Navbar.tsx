@@ -50,6 +50,7 @@ export default function Navbar() {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">홈</Link>
+            <Link to="/cases" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">청소사례</Link>
             <Link to="/booking" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">예약하기</Link>
             <Link to="/reviews" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">이용후기</Link>
             {isAdmin && (
@@ -103,6 +104,7 @@ export default function Navbar() {
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">홈</Link>
+              <Link to="/cases" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">청소사례</Link>
               <Link to="/booking" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">예약하기</Link>
               <Link to="/reviews" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">이용후기</Link>
               {isAdmin && (

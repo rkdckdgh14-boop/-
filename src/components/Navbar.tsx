@@ -44,15 +44,17 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center space-x-2">
             <Leaf className="w-8 h-8 text-primary" />
-            <span className="text-xl font-bold tracking-tight text-gray-900">에코 청소업체</span>
+            <span className="text-xl font-bold tracking-tight text-gray-900">에코클린</span>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">홈</Link>
+            <Link to="/about" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">회사소개</Link>
             <Link to="/cases" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">청소사례</Link>
             <Link to="/booking" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">예약하기</Link>
             <Link to="/reviews" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">이용후기</Link>
+            <Link to="/recruitment" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">채용공고</Link>
             {isAdmin && (
               <Link to="/admin" className="inline-flex items-center space-x-1 text-sm font-bold text-accent hover:text-accent-dark transition-colors bg-accent/10 px-3 py-1 rounded-full">
                 <LayoutDashboard className="w-4 h-4" />
@@ -104,9 +106,11 @@ export default function Navbar() {
           >
             <div className="px-4 pt-2 pb-6 space-y-1">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">홈</Link>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">회사소개</Link>
               <Link to="/cases" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">청소사례</Link>
               <Link to="/booking" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">예약하기</Link>
               <Link to="/reviews" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">이용후기</Link>
+              <Link to="/recruitment" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">채용공고</Link>
               {isAdmin && (
                 <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-black text-accent">관리자 페이지</Link>
               )}

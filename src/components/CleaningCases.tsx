@@ -126,6 +126,57 @@ export default function CleaningCases() {
         </div>
       </section>
 
+      {/* BEFORE & AFTER Section */}
+      <section className="py-24 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20 space-y-4">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight italic uppercase">Before & After</h2>
+            <div className="h-1.5 w-24 bg-primary mx-auto rounded-full" />
+            <p className="text-gray-500 font-bold text-lg pt-4">에코클린이 선사하는 확실한 공간의 변화를 눈으로 직접 확인하세요.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            {[
+              { before: 'https://cdn.imweb.me/thumbnail/20260116/c14fd35ac3c12.png', after: 'https://cdn.imweb.me/thumbnail/20260116/903e916a4af88.png', title: '배수구 찌든때 제거' },
+              { before: 'https://cdn.imweb.me/thumbnail/20260116/71b2aec8d16f7.png', after: 'https://cdn.imweb.me/thumbnail/20260116/c130eaf417ad0.png', title: '수전 물때 광택 복원' },
+              { before: 'https://cdn.imweb.me/thumbnail/20260116/7e7f106475555.png', after: 'https://cdn.imweb.me/thumbnail/20260116/42703e3d8c3b0.png', title: '가스레인지 기름때 제거' },
+              { before: 'https://cdn.imweb.me/thumbnail/20260116/2e5e0eb6622f5.png', after: 'https://cdn.imweb.me/thumbnail/20260116/de50af3c57477.png', title: '창틀 먼지 살균 청소' }
+            ].map((pair, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="space-y-6"
+              >
+                <h4 className="text-2xl font-black text-gray-800 flex items-center gap-3">
+                  <span className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary text-sm font-black italic">0{idx + 1}</span>
+                  {pair.title}
+                </h4>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Before */}
+                  <div className="relative flex-1 group">
+                    <div className="aspect-square rounded-3xl overflow-hidden shadow-lg">
+                      <img src={pair.before} alt="Before" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" />
+                    </div>
+                    <div className="absolute top-4 left-4 bg-gray-900/80 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest z-20">Before</div>
+                    <div className="absolute bottom-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black text-white/60 z-20">에코클린 Verified</div>
+                  </div>
+                  {/* After */}
+                  <div className="relative flex-1 group">
+                    <div className="aspect-square rounded-3xl overflow-hidden shadow-xl ring-4 ring-primary/20">
+                      <img src={pair.after} alt="After" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" referrerPolicy="no-referrer" />
+                    </div>
+                    <div className="absolute top-4 left-4 bg-primary text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest z-20 shadow-lg animate-pulse">After</div>
+                    <div className="absolute bottom-4 right-4 bg-primary/20 backdrop-blur-sm px-3 py-1 rounded-lg text-[10px] font-black text-white/80 z-20">에코클린 Quality</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-24 bg-primary text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />

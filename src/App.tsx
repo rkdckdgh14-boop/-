@@ -6,6 +6,8 @@ import PromotionBanner from './components/PromotionBanner';
 import BookingForm from './components/BookingForm';
 import ReviewSection from './components/ReviewSection';
 import CleaningCases from './components/CleaningCases';
+import AboutUs from './components/AboutUs';
+import Recruitment from './components/Recruitment';
 import AdminDashboard from './components/AdminDashboard';
 import MyPage from './components/MyPage';
 import { Sparkles, ArrowRight, ShieldCheck, Clock, Zap } from 'lucide-react';
@@ -156,10 +158,10 @@ function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-6">
               <Sparkles className="w-6 h-6 text-primary" />
-              <span className="text-xl font-bold tracking-tight">에코 청소업체</span>
+              <span className="text-xl font-bold tracking-tight">에코클린</span>
             </div>
             <p className="text-gray-500 max-w-sm leading-relaxed font-medium">
-              에코 청소업체는 친환경 가치와 꼼꼼한 전문 서비스를 통해 고객님의 생활 공간을 더욱 건강하고 쾌적하게 변화시킵니다.
+              에코클린은 친환경 가치와 꼼꼼한 전문 서비스를 통해 고객님의 생활 공간을 더욱 건강하고 쾌적하게 변화시킵니다.
             </p>
           </div>
           
@@ -210,6 +212,8 @@ export default function App() {
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/reviews" element={<ReviewSection />} />
             <Route path="/cases" element={<CleaningCases />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/recruitment" element={<Recruitment />} />
           </Routes>
         </main>
         <Footer />

@@ -81,7 +81,7 @@ export default function MyPage() {
               <p className="text-gray-500 font-medium">{auth.currentUser.email}</p>
             </div>
           </div>
-          <p className="text-gray-500">지금까지 에코 청소업체와 함께한 기록입니다.</p>
+          <p className="text-gray-500">지금까지 에코클린과 함께한 기록입니다.</p>
         </div>
         
         <button 

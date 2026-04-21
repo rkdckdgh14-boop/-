@@ -1,10 +1,25 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, CheckCircle2, Star } from 'lucide-react';
+
+const heroImages = [
+  "https://i.pinimg.com/736x/62/bb/c8/62bbc8b38e0f45edd4142e75e2489002.jpg",
+  "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&q=80&w=1600",
+  "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1600",
+  "https://images.unsplash.com/photo-1628177142898-93e36e4e3a50?auto=format&fit=crop&q=80&w=1600"
+];
 
 export default function Hero() {
   const navigate = useNavigate();
+  const [currentImage, setCurrentImage] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % heroImages.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <section className="relative bg-primary pt-32 pb-0 overflow-hidden text-center text-white">
@@ -21,11 +36,11 @@ export default function Hero() {
           </div>
           
           <h1 className="text-4xl sm:text-7xl font-light tracking-tight leading-tight mb-6">
-            매주 찾아가는 <span className="font-bold">청소서비스</span>
+            러블리한 <span className="font-bold">하우스의 첫걸음</span>
           </h1>
           
           <p className="text-xl sm:text-2xl opacity-90 mb-10 font-medium">
-            에코클린 찾아가는 청소 정기구독 서비스 런칭
+            편안하고 안락한 공간을 위해 최선을 다합니다.
           </p>
 
           <div className="mb-16">
@@ -40,18 +55,32 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Hero Image - Cleaning Supplies */}
-      <div className="max-w-6xl mx-auto px-4 mt-8 relative overflow-hidden h-[300px] md:h-[500px]">
-        <motion.img
-          initial={{ opacity: 0, y: 100 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          src="https://i.pinimg.com/1200x/6c/f7/81/6cf78124ccd78ddf80764a3ba6d34471.jpg"
-          alt="Professional Cleaning Supplies"
-          className="w-full h-full object-contain rounded-t-[3rem]"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none rounded-t-[3rem]" />
+      {/* Hero Image Slider */}
+      <div className="max-w-6xl mx-auto px-4 mt-8 relative overflow-hidden h-[350px] md:h-[600px] rounded-t-[3rem] shadow-2xl">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentImage}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.8 }}
+            src={heroImages[currentImage]}
+            alt="Professional Cleaning Service"
+            className="absolute inset-0 w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+        </AnimatePresence>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+        
+        {/* Slider Indicators */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-3 z-20">
+          {heroImages.map((_, i) => (
+            <div 
+              key={i}
+              className={`h-1.5 transition-all duration-300 rounded-full ${i === currentImage ? 'w-8 bg-white' : 'w-2 bg-white/40'}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

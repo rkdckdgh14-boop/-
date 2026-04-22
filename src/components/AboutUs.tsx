@@ -69,22 +69,29 @@ export default function AboutUs() {
             </div>
             <div className="flex-1 space-y-8">
               <div className="space-y-4">
-                <h2 className="text-3xl font-black text-gray-900 leading-tight">고객님의 미소가<br />에코클린의 자부심입니다.</h2>
-                <div className="h-1 w-20 bg-primary rounded-full" />
+                <h2 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight">
+                  믿을 수 있는 청소업체<br />
+                  내 집처럼 <span className="text-[#FF4D8D]">꼼꼼하게!</span>
+                </h2>
+                <div className="h-1.5 w-24 bg-primary rounded-full" />
               </div>
               <div className="text-gray-600 space-y-6 text-lg font-medium leading-relaxed">
                 <p>
-                  안녕하십니까, 에코클린 대표입니다. 저희는 '공간이 바뀌면 삶이 바뀐다'는 믿음으로 시작되었습니다. 바쁜 일상 속에서 청소는 늘 마음의 짐이 되곤 합니다.
+                  이제는 시대가 많이 바뀌었습니다.
                 </p>
                 <p>
-                  에코클린은 고객님의 소중한 시간을 되찾아드리고, 그 빈자리를 깨끗함과 건강함으로 채워드리고자 합니다. 엄격한 매니저 선발과 교육, 그리고 환경을 생각하는 친환경 솔루션은 저희가 지켜나가는 가장 중요한 약속입니다.
+                  무조건 저렴한 가격과 추가비용이 발생하지 않는다는 터무니 없는 얘기는 하지 않겠습니다.
                 </p>
                 <p>
-                  앞으로도 기본에 충실하며, 끊임없이 연구하고 발전하는 에코클린이 되겠습니다. 고객님의 공간을 가장 먼저 생각하는 든든한 파트너가 되겠습니다.
+                  저희 에코클린은 평수에 따른 견적부터 추가적인 비용까지 있는 그대로 투명하게 운영하며
+                  체계적인 프로세스와 경험 많은 전문가가 직접 현장에 방문해 청소를 진행하며
+                  확실한 A/S 및 사후처리를 보장하겠습니다.
                 </p>
-              </div>
-              <div className="pt-4">
-                <p className="text-xl font-black italic text-gray-900 tracking-tighter">에코클린 임직원 일동</p>
+                <div className="pt-6">
+                  <p className="text-xl font-bold text-gray-900 tracking-tight" style={{ fontFamily: '"Malgun Gothic", "맑은 고딕", sans-serif' }}>
+                    대표이사 강창호
+                  </p>
+                </div>
               </div>
             </div>
           </div>

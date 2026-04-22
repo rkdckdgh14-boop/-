@@ -55,6 +55,7 @@ export default function Navbar() {
             <Link to="/booking" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">예약하기</Link>
             <Link to="/reviews" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">이용후기</Link>
             <Link to="/recruitment" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">채용공고</Link>
+            <Link to="/faq" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">FAQ</Link>
             {isAdmin && (
               <Link to="/admin" className="inline-flex items-center space-x-1 text-sm font-bold text-accent hover:text-accent-dark transition-colors bg-accent/10 px-3 py-1 rounded-full">
                 <LayoutDashboard className="w-4 h-4" />
@@ -111,6 +112,7 @@ export default function Navbar() {
               <Link to="/booking" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">예약하기</Link>
               <Link to="/reviews" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">이용후기</Link>
               <Link to="/recruitment" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">채용공고</Link>
+              <Link to="/faq" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary">FAQ</Link>
               {isAdmin && (
                 <Link to="/admin" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-base font-black text-accent">관리자 페이지</Link>
               )}

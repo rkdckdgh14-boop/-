@@ -8,6 +8,7 @@ import ReviewSection from './components/ReviewSection';
 import CleaningCases from './components/CleaningCases';
 import AboutUs from './components/AboutUs';
 import Recruitment from './components/Recruitment';
+import FAQ from './components/FAQ';
 import AdminDashboard from './components/AdminDashboard';
 import MyPage from './components/MyPage';
 import { Sparkles, ArrowRight, ShieldCheck, Clock, Zap } from 'lucide-react';
@@ -214,6 +215,7 @@ export default function App() {
             <Route path="/cases" element={<CleaningCases />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/recruitment" element={<Recruitment />} />
+            <Route path="/faq" element={<FAQ />} />
           </Routes>
         </main>
         <Footer />

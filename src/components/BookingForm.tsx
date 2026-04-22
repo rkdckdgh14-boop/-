@@ -57,7 +57,7 @@ export default function BookingForm() {
 
       // 2. Formspree data collection
       try {
-        await fetch('https://formspree.io/f/mojynbrz', {
+        await fetch('https://formspree.io/f/maqadrjp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

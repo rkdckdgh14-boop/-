@@ -57,6 +57,8 @@ export default function ReviewSection() {
     { id: '1', userName: '김지현', rating: 5, content: '아이 키우느라 청소할 시간이 부족했는데, 정말 꼼꼼하게 해주셔서 감동받았습니다. 특히 화장실 물때가 싹 사라졌어요!', createdAt: { seconds: 1710460800 } },
     { id: '2', userName: '이민호', rating: 5, content: '이사 청소 맡겼는데 창틀까지 깨끗하게 관리해주셨네요. 추천합니다.', createdAt: { seconds: 1710201600 } },
     { id: '3', userName: '박서준', rating: 4, content: '예약이 간편해서 좋았고 매니저님도 친절하셨어요.', createdAt: { seconds: 1710028800 } },
+    { id: '4', userName: '최윤서', rating: 5, content: '부모님 댁 청소해드렸는데 너무 좋아하세요. 구석구석 쌓인 먼지까지 다 털어주시고 정리까지 완벽합니다!', createdAt: { seconds: 1709856000 } },
+    { id: '5', userName: '정우진', rating: 5, content: '에코클린 덕분에 집이 새집이 된 것 같아요. 친환경 세제라 그런지 냄새도 자극적이지 않고 정말 상쾌합니다.', createdAt: { seconds: 1709683200 } },
   ];
 
   const allReviews = reviews.length > 0 ? reviews : mockReviews;

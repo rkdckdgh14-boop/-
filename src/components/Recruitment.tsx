@@ -41,7 +41,7 @@ export default function Recruitment() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('https://formspree.io/f/mojynbrz', {
+      const response = await fetch('https://formspree.io/f/maqadrjp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

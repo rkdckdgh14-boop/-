@@ -122,9 +122,9 @@ function LandingPage() {
                 <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl flex items-center justify-between">
                    <div>
                       <div className="text-white/60 text-xs font-black uppercase tracking-widest">Discount Code</div>
-                      <div className="text-white text-2xl font-black">WELCOME25</div>
+                      <div className="text-white text-2xl font-black">WELCOME70</div>
                    </div>
-                   <div className="text-4xl font-black text-accent outline-white">25%</div>
+                   <div className="text-4xl font-black text-accent outline-white">70%</div>
                 </div>
               </div>
               

@@ -1,16 +1,18 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Star, MessageSquare, User, X, Send } from 'lucide-react';
+import { Star, MessageSquare, User, X, Send, Edit2, Trash2 } from 'lucide-react';
 import { db, auth } from '../lib/firebase';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { Review } from '../types';
 import { format } from 'date-fns';
 
 export default function ReviewSection() {
   const [reviews, setReviews] = React.useState<Review[]>([]);
   const [isFormOpen, setIsFormOpen] = React.useState(false);
+  const [editingReview, setEditingReview] = React.useState<Review | null>(null);
   const [newReview, setNewReview] = React.useState({ rating: 5, content: '' });
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect(() => {
     const q = query(collection(db, 'reviews'), orderBy('createdAt', 'desc'));
@@ -20,6 +22,16 @@ export default function ReviewSection() {
     });
     return () => unsubscribe();
   }, []);
+
+  React.useEffect(() => {
+    const checkAdmin = async () => {
+      if (auth.currentUser) {
+        const adminDoc = await getDoc(doc(db, 'admins', auth.currentUser.uid));
+        setIsAdmin(adminDoc.exists());
+      }
+    };
+    checkAdmin();
+  }, [auth.currentUser]);
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +65,43 @@ export default function ReviewSection() {
     }
   };
 
+  const handleUpdateReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingReview) return;
+
+    if (!editingReview.content.trim()) {
+      alert('후기 내용을 입력해주세요.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const reviewRef = doc(db, 'reviews', editingReview.id);
+      await updateDoc(reviewRef, {
+        content: editingReview.content,
+        rating: editingReview.rating,
+        updatedAt: serverTimestamp(),
+      });
+      setEditingReview(null);
+    } catch (error) {
+      console.error('Error updating review:', error);
+      alert('후기 수정 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId: string) => {
+    if (!window.confirm('정말 이 후기를 삭제하시겠습니까?')) return;
+
+    try {
+      await deleteDoc(doc(db, 'reviews', reviewId));
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      alert('후기 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
   const mockReviews = [
     { id: '1', userName: '김지현', rating: 5, content: '아이 키우느라 청소할 시간이 부족했는데, 정말 꼼꼼하게 해주셔서 감동받았습니다. 특히 화장실 물때가 싹 사라졌어요!', createdAt: { seconds: 1710460800 } },
     { id: '2', userName: '이민호', rating: 5, content: '이사 청소 맡겼는데 창틀까지 깨끗하게 관리해주셨네요. 추천합니다.', createdAt: { seconds: 1710201600 } },
@@ -82,13 +131,33 @@ export default function ReviewSection() {
                 transition={{ delay: i * 0.1 }}
                 className="bg-gray-50 p-8 rounded-3xl border border-gray-100 relative group hover:shadow-xl transition-all"
               >
-                <div className="flex text-yellow-400 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <Star 
-                      key={j} 
-                      className={`w-4 h-4 ${j < review.rating ? 'fill-current' : 'text-gray-200'}`} 
-                    />
-                  ))}
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, j) => (
+                      <Star 
+                        key={j} 
+                        className={`w-4 h-4 ${j < review.rating ? 'fill-current' : 'text-gray-200'}`} 
+                      />
+                    ))}
+                  </div>
+                  {(isAdmin || auth.currentUser?.uid === review.userId) && (
+                    <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button 
+                        onClick={() => setEditingReview(review)}
+                        className="p-1.5 bg-white rounded-lg shadow-sm text-gray-500 hover:text-primary hover:bg-primary/5 transition-all"
+                        title="수정하기"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteReview(review.id)}
+                        className="p-1.5 bg-white rounded-lg shadow-sm text-gray-500 hover:text-red-500 hover:bg-red-50 transition-all"
+                        title="삭제하기"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <p className="text-gray-700 leading-relaxed mb-6 italic">"{review.content}"</p>
                 <div className="flex items-center justify-between border-t border-gray-200 pt-4">
@@ -115,6 +184,77 @@ export default function ReviewSection() {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Edit Modal */}
+        <AnimatePresence>
+          {editingReview && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setEditingReview(null)}
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                className="relative w-full max-w-lg bg-white rounded-[2.5rem] shadow-2xl p-8 overflow-hidden"
+              >
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-2xl font-black italic tracking-tight">Edit Review</h3>
+                  <button 
+                    onClick={() => setEditingReview(null)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-gray-400" />
+                  </button>
+                </div>
+
+                <form onSubmit={handleUpdateReview} className="space-y-6">
+                  <div className="flex items-center justify-center space-x-2 py-4 bg-gray-50 rounded-2xl">
+                    {[...Array(5)].map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setEditingReview({ ...editingReview, rating: i + 1 })}
+                        className={`p-1 transform transition-all hover:scale-125 ${i < editingReview.rating ? 'text-yellow-400' : 'text-gray-200'}`}
+                      >
+                        <Star className={`w-8 h-8 ${i < editingReview.rating ? 'fill-current' : ''}`} />
+                      </button>
+                    ))}
+                  </div>
+
+                  <textarea
+                    required
+                    rows={4}
+                    value={editingReview.content}
+                    onChange={(e) => setEditingReview({ ...editingReview, content: e.target.value })}
+                    className="w-full px-6 py-4 rounded-2xl border border-gray-200 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none text-lg resize-none font-medium"
+                  />
+
+                  <div className="flex space-x-3">
+                    <button
+                      type="button"
+                      onClick={() => setEditingReview(null)}
+                      className="flex-1 py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold text-lg hover:bg-gray-200 transition-all"
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="flex-[2] py-4 bg-primary text-white rounded-2xl font-bold text-lg flex items-center justify-center shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50"
+                    >
+                      {isSubmitting ? '수정 중...' : '수정 완료'}
+                    </button>
+                  </div>
+                </form>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
         <div className="mt-16 text-center space-y-6">
           {!isFormOpen ? (

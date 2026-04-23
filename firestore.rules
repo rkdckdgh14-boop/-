@@ -77,10 +77,16 @@ service cloud.firestore {
     }
 
     match /reviews/{reviewId} {
-      allow read: if true; // Reviews are public
-      allow create: if isVerifiedUser() && isValidReview(incoming()) && isValidId(reviewId);
-      allow update: if isAdmin();
-      allow delete: if isAdmin() || (isSignedIn() && existing().userId == request.auth.uid);
+      allow read: if true;
+      allow create: if isVerifiedUser() && isValidReview(incoming());
+      allow update: if (isAdmin() || isOwner(existing().userId))
+        && (isAdmin() || (
+          incoming().userId == existing().userId &&
+          incoming().userName == existing().userName &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['content', 'rating', 'updatedAt'])
+        ));
+      allow delete: if isAdmin() || isOwner(existing().userId);
     }
 
     match /admins/{adminId} {
